@@ -25,6 +25,16 @@ def change_sold():
 
     update_label()
 
+def add_comic():
+    try:
+        if add_name.get() == '':
+            add_error_msg.set("Please enter a value for the comic name!")
+        else:
+            Comics(add_name.get(), int(add_amount.get()), 0)
+            update_label()
+    except ValueError:
+        add_error_msg.set("Please type in an integer value!")
+
 class Comics:
     def __init__(self, name, amount, sold):
         self._name = name 
@@ -46,8 +56,11 @@ root.title("comics label")
 root.geometry('800x1000')
 
 info_frame = Frame(root, relief = "groove", borderwidth = 2, width = 800, height = 100)
+info_frame.grid_propagate(0)
 info_frame.grid(row = 0)
-frame2 = Frame(root, relief = "groove", borderwidth = 2, width = 400).grid(row = 1, column = 0)
+add_frame = Frame(root, relief = "groove", borderwidth = 2, width = 400)
+#add_frame.grid_propagate(0)
+add_frame.grid(row = 1, column = 0)
 frame3 = Frame(root, relief = "groove", borderwidth = 2, width = 400).grid(row = 1, column = 1)
 frame4 = Frame(root, relief = "groove", borderwidth = 2, width = 400).grid(row = 2, column = 0)
 frame5 = Frame(root, relief = "groove", borderwidth = 2, width = 400).grid(row = 2, column = 1)
@@ -84,6 +97,35 @@ error_msg.set("")
 
 selling_error = Label(info_frame, textvariable=error_msg)
 selling_error.grid(row=3, column = 1)
+
+add_window = Label(add_frame, text="Adding Window")
+add_window.grid(row = 0, columnspan = 2)
+
+name_lbl = Label(add_frame, text = "Name ")
+name_lbl.grid(row = 1, column = 0)
+
+add_name = StringVar()
+
+add_entry = Entry(add_frame, textvariable=add_name)
+add_entry.grid(row = 1, column = 1)
+
+amount_lbl = Label(add_frame, text = "Quantity ")
+amount_lbl.grid(row = 2, column = 0)
+
+add_amount = StringVar()
+
+amount_entry = Entry(add_frame, textvariable=add_amount)
+amount_entry.grid(row = 2, column = 1)
+
+add_btn = Button(add_frame, text="Select", command=add_comic)
+add_btn.grid(row = 3, columnspan = 2)
+
+add_error_msg = StringVar()
+add_error_msg.set("")
+
+add_error = Label(add_frame, textvariable=add_error_msg)
+add_error.grid(row= 4 , columnspan = 2)
+
 
 update_label()
 root.mainloop()
