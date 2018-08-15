@@ -3,24 +3,33 @@ from tkinter import *
 def update_label():
     comic_info.set("")
     for p in comics:
-        comic_info.set(comic_info.get() + p._name + "    Comics Available:  " + str(p._amount) + "\n")
+        comic_info.set(comic_info.get() + p._name + "    Comics Available:   " + str(p._amount) + "    Comics Sold:   " + str(p._sold) + "\n")
 
 def change_sold():
-    print("Hello")
+    print(selected_comic.get())
+    for i in comics:
+        if selected_comic.get() == i._name:
+            i._amount -= int(num_comics.get())
+            i._sold += int(num_comics.get())
+        print(i._name)
+        print(i._amount)
+
+    update_label()
 
 class Comics:
-    def __init__(self, name, amount):
+    def __init__(self, name, amount, sold):
         self._name = name 
         self._amount = amount
+        self._sold = sold
         comics.append(self)
         comic_names.append(self._name)
 
 comics = []
 comic_names = []
 
-Comics("Python Panic", 8)
-Comics("Scrath the Cat", 12)
-Comics("Tony Tkinter", 3)
+Comics("Python Panic", 8, 0)
+Comics("Scrath the Cat", 12, 0)
+Comics("Tony Tkinter", 3, 0)
 
 
 root = Tk()
@@ -39,7 +48,7 @@ frame5 = Frame(root, relief = "groove", borderwidth = 2, width = 400).grid(row =
 comic_info = StringVar()
 
 comic_lbl = Label(info_frame, textvariable=comic_info)
-comic_lbl.grid(row=0, column = 0)
+comic_lbl.grid(row=0, column = 0, rowspan = 3)
 
 selling_window = Label(info_frame, text = "Selling Window")
 selling_window.grid(row=0, column = 1)
