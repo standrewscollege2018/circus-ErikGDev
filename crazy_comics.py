@@ -29,9 +29,14 @@ def add_comic():
     try:
         if add_name.get() == '':
             add_error_msg.set("Please enter a value for the comic name!")
+        elif int(add_amount.get()) < 1:
+            add_error_msg.set("Please enter a value that is larger than 1!")
         else:
             Comics(add_name.get(), int(add_amount.get()), 0)
             update_label()
+            add_error_msg.set("")
+            comic_menu = OptionMenu(info_frame, selected_comic, *comic_names)
+            comic_menu.grid(row = 1, column = 1)
     except ValueError:
         add_error_msg.set("Please type in an integer value!")
 
