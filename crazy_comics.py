@@ -40,6 +40,9 @@ def add_comic():
     except ValueError:
         add_error_msg.set("Please type in an integer value!")
 
+def restock_comic():
+    print("Hello World!")
+
 class Comics:
     def __init__(self, name, amount, sold):
         self._name = name 
@@ -60,13 +63,14 @@ root = Tk()
 root.title("comics label")
 root.geometry('800x1000')
 
-info_frame = Frame(root, relief = "groove", borderwidth = 2, width = 800, height = 100)
+info_frame = Frame(root, relief = "groove", borderwidth = 2, width = 400, height = 800)
 info_frame.grid_propagate(0)
-info_frame.grid(row = 0)
+info_frame.grid(rowspan = 4, column = 0)
 add_frame = Frame(root, relief = "groove", borderwidth = 2, width = 400)
 #add_frame.grid_propagate(0)
-add_frame.grid(row = 1, column = 0)
-frame3 = Frame(root, relief = "groove", borderwidth = 2, width = 400).grid(row = 1, column = 1)
+add_frame.grid(row = 0, column = 1)
+restock_frame = Frame(root, relief = "groove", borderwidth = 2, width = 400)
+restock_frame.grid(row = 1, column = 1)
 frame4 = Frame(root, relief = "groove", borderwidth = 2, width = 400).grid(row = 2, column = 0)
 frame5 = Frame(root, relief = "groove", borderwidth = 2, width = 400).grid(row = 2, column = 1)
 
@@ -75,27 +79,27 @@ frame5 = Frame(root, relief = "groove", borderwidth = 2, width = 400).grid(row =
 comic_info = StringVar()
 
 comic_lbl = Label(info_frame, textvariable=comic_info)
-comic_lbl.grid(row = 0, column = 0, rowspan = 3)
+comic_lbl.grid(row = 0, columnspan = 2)
 
 selling_window = Label(info_frame, text = "Selling Window")
-selling_window.grid(row = 0, column = 1)
+selling_window.grid(row = 1, columnspan = 2)
 
 quantity_sold = Label(info_frame, text = "Quantity Sold")
-quantity_sold.grid(row = 0, column = 2)
+quantity_sold.grid(row = 2, column = 0)
 
 selected_comic = StringVar()
 selected_comic.set(comic_names[0])
 
 comic_menu = OptionMenu(info_frame, selected_comic, *comic_names)
-comic_menu.grid(row = 1, column = 1)
+comic_menu.grid(row = 2, column = 0)
 
 num_comics = StringVar()
 
 comic_entry = Entry(info_frame, textvariable=num_comics)
-comic_entry.grid(row = 1, column = 2)
+comic_entry.grid(row = 2, column = 1)
 
 select_btn = Button(info_frame, text="Select", command=change_sold)
-select_btn.grid(row = 2, column = 1)
+select_btn.grid(row = 3, columnspan = 2)
 
 error_msg = StringVar()
 error_msg.set("")
@@ -130,6 +134,39 @@ add_error_msg.set("")
 
 add_error = Label(add_frame, textvariable=add_error_msg)
 add_error.grid(row= 4 , columnspan = 2)
+
+'''Restock stuff'''
+
+restock_window = Label(restock_frame, text="Restock Window")
+restock_window.grid(row = 0, columnspan = 2)
+
+
+
+restock_name_lbl = Label(restock_frame, text = "Name ")
+restock_name_lbl.grid(row = 1, column = 0)
+
+restock_name = StringVar()
+
+restock_entry = Entry(restock_frame, textvariable=restock_name)
+restock_entry.grid(row = 1, column = 1)
+
+restock_amount_lbl = Label(restock_frame, text = "Quantity ")
+restock_amount_lbl.grid(row = 2, column = 0)
+
+restock_amount = StringVar()
+
+restock_amount_entry = Entry(restock_frame, textvariable=restock_amount)
+restock_amount_entry.grid(row = 2, column = 1)
+
+restock_btn = Button(restock_frame, text="Select", command=restock_comic)
+restock_btn.grid(row = 3, columnspan = 2)
+
+restock_error_msg = StringVar()
+restock_error_msg.set("")
+
+restock_error = Label(restock_frame, textvariable=add_error_msg)
+restock_error.grid(row= 4 , columnspan = 2)
+
 
 
 update_label()
