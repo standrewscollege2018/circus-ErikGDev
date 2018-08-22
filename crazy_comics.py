@@ -35,13 +35,30 @@ def add_comic():
             Comics(add_name.get(), int(add_amount.get()), 0)
             update_label()
             add_error_msg.set("")
+            comic_menu.grid_forget()
             comic_menu = OptionMenu(info_frame, selected_comic, *comic_names)
-            comic_menu.grid(row = 1, column = 1)
+            comic_menu.grid(row = 2, column = 0)
     except ValueError:
         add_error_msg.set("Please type in an integer value!")
 
 def restock_comic():
-    print("Hello World!")
+    for i in comics:
+        try:
+            if restock_name.get() == i._name:
+                if int(restock_amount.get()) >= 1 and int(restock_amount.get()) <= 20:
+                    i._amount += int(restock_amount.get())
+                    restock_error_msg.set("Successfully restocked {} {} comic(s)".format(int(restock_amount.get()), i._name))
+
+                elif int(restock_amount.get()) < 1:
+                    restock_error_msg.set("Please enter a value that is larger than 0!")
+
+                elif int(restock_amount.get()) > 20:
+                    restock_error_msg.set("Please enter a value that is {} or less!".format(i._amount))
+
+        except ValueError:
+            restock_error_msg.set("Please enter an integer value!")
+
+    update_label()
 
 class Comics:
     def __init__(self, name, amount, sold):
@@ -146,9 +163,10 @@ restock_name_lbl = Label(restock_frame, text = "Name ")
 restock_name_lbl.grid(row = 1, column = 0)
 
 restock_name = StringVar()
+restock_name.set(comic_names[0])
 
-restock_entry = Entry(restock_frame, textvariable=restock_name)
-restock_entry.grid(row = 1, column = 1)
+restock_option = OptionMenu(restock_frame, restock_name, *comic_names)
+restock_option.grid(row = 1, column = 1)
 
 restock_amount_lbl = Label(restock_frame, text = "Quantity ")
 restock_amount_lbl.grid(row = 2, column = 0)
@@ -164,7 +182,7 @@ restock_btn.grid(row = 3, columnspan = 2)
 restock_error_msg = StringVar()
 restock_error_msg.set("")
 
-restock_error = Label(restock_frame, textvariable=add_error_msg)
+restock_error = Label(restock_frame, textvariable=restock_error_msg)
 restock_error.grid(row= 4 , columnspan = 2)
 
 
