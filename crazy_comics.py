@@ -5,6 +5,23 @@ def update_label():
     for p in comics:
         comic_info.set(comic_info.get() + p._name + "    Comics Available:   " + str(p._amount) + "    Comics Sold:   " + str(p._sold) + "\n")
 
+def update_menus():
+    global comic_menu
+    global restock_option
+    global delete_option
+
+    comic_menu.grid_forget()
+    comic_menu = OptionMenu(info_frame, selected_comic, *comic_names)
+    comic_menu.grid(row = 2, column = 0)
+
+    restock_option.grid_forget()
+    restock_option = OptionMenu(restock_frame, restock_name, *comic_names)
+    restock_option.grid(row = 1, column = 1)
+
+    delete_option.grid_forget()
+    delete_option = OptionMenu(delete_frame, delete_name, *comic_names)
+    delete_option.grid(row = 1, column = 1)     
+
 def change_sold():
     for i in comics:
         try:
@@ -35,9 +52,7 @@ def add_comic():
             Comics(add_name.get(), int(add_amount.get()), 0)
             update_label()
             add_error_msg.set("")
-            comic_menu.grid_forget()
-            comic_menu = OptionMenu(info_frame, selected_comic, *comic_names)
-            comic_menu.grid(row = 2, column = 0)
+            update_menus()
     except ValueError:
         add_error_msg.set("Please type in an integer value!")
 
@@ -53,12 +68,20 @@ def restock_comic():
                     restock_error_msg.set("Please enter a value that is larger than 0!")
 
                 elif int(restock_amount.get()) > 20:
-                    restock_error_msg.set("Please enter a value that is {} or less!".format(i._amount))
+                    restock_error_msg.set("Please enter a value that is 20 or less!")
 
         except ValueError:
             restock_error_msg.set("Please enter an integer value!")
 
     update_label()
+
+def delete_comic():
+    for i in comics:
+        if delete_name.get() == i._name:
+            comics.remove(i)
+            comic_names.remove(i._name)
+            update_label()
+            update_menus()
 
 class Comics:
     def __init__(self, name, amount, sold):
@@ -88,7 +111,8 @@ add_frame = Frame(root, relief = "groove", borderwidth = 2, width = 400)
 add_frame.grid(row = 0, column = 1)
 restock_frame = Frame(root, relief = "groove", borderwidth = 2, width = 400)
 restock_frame.grid(row = 1, column = 1)
-frame4 = Frame(root, relief = "groove", borderwidth = 2, width = 400).grid(row = 2, column = 0)
+delete_frame = Frame(root, relief = "groove", borderwidth = 2, width = 400)
+delete_frame.grid(row = 2, column = 1)
 frame5 = Frame(root, relief = "groove", borderwidth = 2, width = 400).grid(row = 2, column = 1)
 
 
@@ -185,7 +209,86 @@ restock_error_msg.set("")
 restock_error = Label(restock_frame, textvariable=restock_error_msg)
 restock_error.grid(row= 4 , columnspan = 2)
 
+'''Delete Stock'''
 
+restock_window = Label(restock_frame, text="Restock Window")
+restock_window.grid(row = 0, columnspan = 2)
+
+
+restock_name_lbl = Label(restock_frame, text = "Name ")
+restock_name_lbl.grid(row = 1, column = 0)
+
+restock_name = StringVar()
+restock_name.set(comic_names[0])
+
+restock_option = OptionMenu(restock_frame, restock_name, *comic_names)
+restock_option.grid(row = 1, column = 1)
+
+restock_btn = Button(restock_frame, text="Select", command=restock_comic)
+restock_btn.grid(row = 3, columnspan = 2)
+
+restock_error_msg = StringVar()
+restock_error_msg.set("")
+
+restock_error = Label(restock_frame, textvariable=restock_error_msg)
+restock_error.grid(row= 4 , columnspan = 2)
+
+'''Delete Stuff'''
+
+restock_window = Label(restock_frame, text="Restock Window")
+restock_window.grid(row = 0, columnspan = 2)
+
+
+
+restock_name_lbl = Label(restock_frame, text = "Name ")
+restock_name_lbl.grid(row = 1, column = 0)
+
+restock_name = StringVar()
+restock_name.set(comic_names[0])
+
+restock_option = OptionMenu(restock_frame, restock_name, *comic_names)
+restock_option.grid(row = 1, column = 1)
+
+restock_amount_lbl = Label(restock_frame, text = "Quantity ")
+restock_amount_lbl.grid(row = 2, column = 0)
+
+restock_amount = StringVar()
+
+restock_amount_entry = Entry(restock_frame, textvariable=restock_amount)
+restock_amount_entry.grid(row = 2, column = 1)
+
+restock_btn = Button(restock_frame, text="Select", command=restock_comic)
+restock_btn.grid(row = 3, columnspan = 2)
+
+restock_error_msg = StringVar()
+restock_error_msg.set("")
+
+restock_error = Label(restock_frame, textvariable=restock_error_msg)
+restock_error.grid(row= 4 , columnspan = 2)
+
+'''Delete Stock'''
+
+delete_window = Label(delete_frame, text="delete Window")
+delete_window.grid(row = 0, columnspan = 2)
+
+
+delete_name_lbl = Label(delete_frame, text = "Name ")
+delete_name_lbl.grid(row = 1, column = 0)
+
+delete_name = StringVar()
+delete_name.set(comic_names[0])
+
+delete_option = OptionMenu(delete_frame, delete_name, *comic_names)
+delete_option.grid(row = 1, column = 1)
+
+delete_btn = Button(delete_frame, text="Select", command=delete_comic)
+delete_btn.grid(row = 3, columnspan = 2)
+
+delete_error_msg = StringVar()
+delete_error_msg.set("")
+
+delete_error = Label(delete_frame, textvariable=delete_error_msg)
+delete_error.grid(row= 4 , columnspan = 2)
 
 update_label()
 root.mainloop()
