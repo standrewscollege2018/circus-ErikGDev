@@ -10,14 +10,17 @@ def update_menus():
     global restock_option
     global delete_option
 
+    selected_comic.set(comic_names[0])
     comic_menu.grid_forget()
     comic_menu = OptionMenu(info_frame, selected_comic, *comic_names)
     comic_menu.grid(row = 2, column = 0)
 
+    restock_name.set(comic_names[0])
     restock_option.grid_forget()
     restock_option = OptionMenu(restock_frame, restock_name, *comic_names)
     restock_option.grid(row = 1, column = 1)
 
+    delete_name.set(comic_names[0])
     delete_option.grid_forget()
     delete_option = OptionMenu(delete_frame, delete_name, *comic_names)
     delete_option.grid(row = 1, column = 1)     
@@ -27,8 +30,9 @@ def change_sold():
         try:
             if selected_comic.get() == i._name:
                 if int(num_comics.get()) >= 1 and int(num_comics.get()) <= i._amount:
-                    i._amount -= int(num_comics.get())
-                    i._sold += int(num_comics.get())
+                    i.sell_comic(int(num_comics.get()))
+                    i.sell_number(int(num_comics.get()))
+
                     error_msg.set("Successfully sold {} {} comic(s)".format(int(num_comics.get()), i._name))
 
                 elif int(num_comics.get()) < 1:
@@ -60,15 +64,15 @@ def restock_comic():
     for i in comics:
         try:
             if restock_name.get() == i._name:
-                if int(restock_amount.get()) >= 1 and int(restock_amount.get()) <= 20:
-                    i._amount += int(restock_amount.get())
+                if int(restock_amount.get()) >= 1 and (int(restock_amount.get()) + i._amount) <= 20:
+                    i.restock(int(restock_amount.get()))
                     restock_error_msg.set("Successfully restocked {} {} comic(s)".format(int(restock_amount.get()), i._name))
 
                 elif int(restock_amount.get()) < 1:
                     restock_error_msg.set("Please enter a value that is larger than 0!")
 
-                elif int(restock_amount.get()) > 20:
-                    restock_error_msg.set("Please enter a value that is 20 or less!")
+                elif (int(restock_amount.get()) + i._amount) > 20:
+                    restock_error_msg.set("You can only have maximum 20 comics!")
 
         except ValueError:
             restock_error_msg.set("Please enter an integer value!")
@@ -90,6 +94,18 @@ class Comics:
         self._sold = sold
         comics.append(self)
         comic_names.append(self._name)
+
+    def restock(self, amount):
+        self._amount += amount
+
+    def sell_comic(self, amount):
+        self._amount -= amount
+
+    def sell_number(self, amount):
+        self._sold += amount
+        
+    
+
 
 comics = []
 comic_names = []
@@ -146,7 +162,7 @@ error_msg = StringVar()
 error_msg.set("")
 
 selling_error = Label(info_frame, textvariable=error_msg)
-selling_error.grid(row=3, column = 1)
+selling_error.grid(row= 4, columnspan = 2)
 
 add_window = Label(add_frame, text="Adding Window")
 add_window.grid(row = 0, columnspan = 2)
