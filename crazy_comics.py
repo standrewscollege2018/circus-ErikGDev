@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 
 #Create function to update the main label with stringVar comic_info
 def update_label():
@@ -73,7 +74,11 @@ def add_comic():
         if add_name.get() == '':
             add_error_msg.set("Please enter a value for the comic name!")
         elif int(add_amount.get()) < 1:
-            add_error_msg.set("Please enter a value that is larger than 1!")
+            add_error_msg.set("Please enter a value that is larger than 0!")
+        elif int(add_amount.get()) > 20:
+            add_error_msg.set("Please enter a value that is less than 20!")
+        elif add_name.get() in comic_names:
+            add_error_msg.set("This comic already exists in the inventory!")
         else:
             Comics(add_name.get(), int(add_amount.get()), 0)
             update_label()
@@ -110,15 +115,16 @@ def restock_comic():
 
 #Create delete_comic() function
 def delete_comic():
-    #Loop through comics
-    for i in comics:
-        #If the looped name is equal to the desired name from use
-        if delete_name.get() == i._name:
-            #Remove the comic from both comics and comic_names list
-            comics.remove(i)
-            comic_names.remove(i._name)
-            update_label()
-            update_menus()
+    if messagebox.askyesno("Delete this Comic?", "Are you sure you want to delete " + delete_name.get() + "? "):
+        #Loop through comics
+        for i in comics:
+            #If the looped name is equal to the desired name from use
+            if delete_name.get() == i._name:
+                #Remove the comic from both comics and comic_names list
+                comics.remove(i)
+                comic_names.remove(i._name)
+                update_label()
+                update_menus()
 
 #Create class called Comics
 class Comics:
@@ -151,7 +157,7 @@ comic_names = []
 
 #Initiate 3 comics for each comic
 Comics("Python Panic", 8, 0)
-Comics("Scrath the Cat", 12, 0)
+Comics("Scratch the Cat", 12, 0)
 Comics("Tony Tkinter", 3, 0)
 
 #Initialise tkinter window
@@ -297,77 +303,6 @@ restock_error_msg = StringVar()
 restock_error_msg.set("")
 
 #Set up restock_error using restock_error_msg
-restock_error = Label(restock_frame, textvariable=restock_error_msg)
-restock_error.grid(row= 4 , columnspan = 2)
-
-'''Delete Stock'''
-
-#Set up restock_window showing "Restock Window"
-restock_window = Label(restock_frame, text="Restock Window")
-restock_window.grid(row = 0, columnspan = 2)
-
-#Set up restock_name_lbl
-restock_name_lbl = Label(restock_frame, text = "Name ")
-restock_name_lbl.grid(row = 1, column = 0)
-
-#Set up restock_name StringVar
-restock_name = StringVar()
-restock_name.set(comic_names[0])
-
-#Set up restock_option option menu using comic_names
-restock_option = OptionMenu(restock_frame, restock_name, *comic_names)
-restock_option.grid(row = 1, column = 1)
-
-#Set up restock_btn connected to restock_comic
-restock_btn = Button(restock_frame, text="Select", command=restock_comic)
-restock_btn.grid(row = 3, columnspan = 2)
-
-#Set up restock_error_msg stringVar
-restock_error_msg = StringVar()
-restock_error_msg.set("")
-
-#Set up restock_error using restock_error_msg
-restock_error = Label(restock_frame, textvariable=restock_error_msg)
-restock_error.grid(row= 4 , columnspan = 2)
-
-'''Delete Stuff'''
-
-#Set up restock window which shows the text "Restock Window"
-restock_window = Label(restock_frame, text="Restock Window")
-restock_window.grid(row = 0, columnspan = 2)
-
-#Set up restock_name_lbl
-restock_name_lbl = Label(restock_frame, text = "Name ")
-restock_name_lbl.grid(row = 1, column = 0)
-
-#Set up restock_name
-restock_name = StringVar()
-restock_name.set(comic_names[0])
-
-#Set up restock_option
-restock_option = OptionMenu(restock_frame, restock_name, *comic_names)
-restock_option.grid(row = 1, column = 1)
-
-#Set up restock_amount_lbl
-restock_amount_lbl = Label(restock_frame, text = "Quantity ")
-restock_amount_lbl.grid(row = 2, column = 0)
-
-#Set up restock_amount
-restock_amount = StringVar()
-
-#Set up restock_amount_entry connected to restock_amount
-restock_amount_entry = Entry(restock_frame, textvariable=restock_amount)
-restock_amount_entry.grid(row = 2, column = 1)
-
-#Set up restock_btn connected to restock_comic
-restock_btn = Button(restock_frame, text="Select", command=restock_comic)
-restock_btn.grid(row = 3, columnspan = 2)
-
-#Set up restock_error_msg
-restock_error_msg = StringVar()
-restock_error_msg.set("")
-
-#Set up restock_error
 restock_error = Label(restock_frame, textvariable=restock_error_msg)
 restock_error.grid(row= 4 , columnspan = 2)
 
